@@ -35,15 +35,6 @@ sudo pacman -Rns --noconfirm \
     nvidia-xrun \
     2>/dev/null || true
 
-# Блокируем загрузку модулей NVIDIA
-echo -e "\e[33mСоздание чёрного списка NVIDIA...\e[0m"
-sudo mkdir -p /etc/modprobe.d
-echo "blacklist nvidia" | sudo tee /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-echo "blacklist nvidia-uvm" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-echo "blacklist nvidia-drm" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-echo "blacklist nvidia-modeset" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-echo "blacklist nvidia-nvlink" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-
 # Удаляем возможные конфиги, которые могут блокировать nouveau
 sudo rm -f /etc/modprobe.d/blacklist-nouveau.conf 2>/dev/null || true
 
