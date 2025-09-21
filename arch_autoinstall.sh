@@ -1,11 +1,12 @@
 #!/bin/bash
+
 # Проверка что скрипт не запущен с sudo
 if [ "$EUID" -eq 0 ]; then
     echo -e "\e[41m\e[97mОШИБКА: Не запускайте скрипт с sudo!\e[0m"
     echo -e "\e[41m\e[97mERROR: Do not run script with sudo!\e[0m"
     exit 1
 fi
-#installing all codec, what gives me deepseek
+
 echo -e "\e[48;5;202m\e[30m⚠️  ВНИМАНИЕ: Не запускайте скрипт с sudo! ⚠️\e[0m"
 echo -e "\e[48;5;202m\e[30m   Скрипт уже содержит sudo где это необходимо.\e[0m"
 echo -e "\e[48;5;202m\e[30m   Запуск с sudo может сломать установку!\e[0m"
@@ -19,13 +20,14 @@ echo -e "\e[41m\e[97m\e[1mЕсли скрипт запущен без ROOT ил�
 echo -e "\e[41m\e[97m\e[1mIf the script is run without ROOT or SUDO, press any key to continue...\e[0m"
 read -n1 -s
 echo ""
+
+# Обновление зеркал
 sudo pacman -Sy --noconfirm reflector
 sleep 5
 sudo reflector --country Russia --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 sudo pacman -Syy
-sudo pacman -S --noconfirm gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly && sudo pacman -S --noconfirm ffmpeg gst-libav && sudo pacman -S --noconfirm a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 x265 xvidcore
-sudo pacman -S --noconfirm vlc mpv
-sudo pacman -S --noconfirm gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly ffmpeg a52dec faac faad2 flac jasper lame libdca libdv libmad libmpeg2 libtheora libvorbis libxv wavpack x264 x265 xvidcore libavc1394 libdc1394 libdv libdvdnav libdvdread libmpeg2 libraw1394 libavif libheif libde265 libaom dav1d svt-av1 vpx opus libfdk-aac libmp3lame libvpx libx264 libx265 libxvid libpng libjpeg-turbo libtiff webp libwebp libvorbis libogg libFLAC libmad libmpeg2 liba52 libdca libdv libtheora libvdpau libva libva-utils intel-vaapi-driver nvidia-vaapi-driver mesa-va-drivers mesa-vdpau-drivers vulkan-icd-loader lib32-vulkan-icd-loader
+
+# Установка всех медиа-кодеков и инструментов (один раз, без дубликатов)
 sudo pacman -S --noconfirm \
     gst-libav gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly \
     ffmpeg ffmpeg2theora ffmpegthumbnailer \
@@ -34,63 +36,88 @@ sudo pacman -S --noconfirm \
     x264 x265 xvidcore libavif libheif libde265 libaom dav1d svt-av1 vpx libvpx \
     libpng libjpeg-turbo libtiff webp libwebp jasper \
     libdvdnav libdvdread libbluray \
-    libva libva-utils libvdpau intel-vaapi-driver nvidia-vaapi-driver \
+    libva libva-utils libvdpau intel-vaapi-driver \
     mesa-va-drivers mesa-vdpau-drivers vulkan-icd-loader lib32-vulkan-icd-loader \
     libraw1394 libavc1394 libdc1394 libraw libusb libass libsoxr \
     python-pillow python-numpy python-opencv \
-    vlc mpv smplayer celluloid \
-    mplayer mpv-mpris \
-    mediainfo exiftool handbrake handbrake-cli
-sudo pacman -S --noconfirm flameshot obs-studio
-sudo pacman -S --noconfirm gimp inkscape krita
-sudo pacman -S --noconfirm htop bashtop gotop
-sudo pacman -S --noconfirm ncdu baobab gparted
-sudo pacman -S --noconfirm wireshark-qt nmap
-sudo pacman -S --noconfirm timeshift
-sudo pacman -S --noconfirm wine-staging lutris
-sudo pacman -S --noconfirm audacity ardour
-sudo pacman -S --noconfirm handbrake
-sudo pacman -S --noconfirm code visual-studio-code-bin
-sudo pacman -S --noconfirm python-pip
-sudo pacman -S --noconfirm firefox chromium
-sudo pacman -S --noconfirm mesa lib32-mesa vulkan-icd-loader lib32-vulkan-icd-loader
-sudo pacman -S --noconfirm xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
-sudo pacman -S --noconfirm vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
-sudo pacman -Rns nvidia nvidia-utils nvidia-settings 2>/dev/null || true
+    vlc mpv smplayer celluloid mplayer mpv-mpris \
+    mediainfo exiftool handbrake handbrake-cli \
+    flameshot obs-studio \
+    gimp inkscape krita \
+    htop bashtop gotop \
+    ncdu baobab gparted \
+    wireshark-qt nmap \
+    timeshift \
+    wine-staging lutris \
+    audacity ardour \
+    code visual-studio-code-bin \
+    python-pip \
+    firefox chromium \
+    mesa lib32-mesa \
+    xf86-video-intel xf86-video-amdgpu xf86-video-nouveau \
+    vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon \
+    lib32-mesa \
+    nftables
+
+# ------------------
+# УДАЛЕНИЕ ПРОПРИЕТАРНЫХ ДРАЙВЕРОВ NVIDIA И ПЕРЕКЛЮЧЕНИЕ НА NOUVEAU
+# ------------------
+
+# Удаляем все пакеты NVIDIA
+sudo pacman -Rns --noconfirm nvidia nvidia-utils nvidia-settings nvidia-vaapi-driver 2>/dev/null || true
+
+# Блокируем загрузку модуля nvidia
 echo "blacklist nvidia" | sudo tee /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
-sudo pacman -S --noconfirm mesa lib32-mesa vulkan-icd-loader lib32-vulkan-icd-loader
-sudo pacman -S --noconfirm xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
-sudo pacman -S --noconfirm vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
-sudo pacman -S --noconfirm lib32-nouveau-dri
-sudo pacman -S --noconfirm lib32-mesa lib32-vulkan-icd-loader lib32-vulkan-radeon lib32-vulkan-intel
-sudo pacman -S --noconfirm lib32-nouveau-dri nftables
+echo "blacklist nvidia-uvm" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
+echo "blacklist nvidia-drm" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
+echo "blacklist nvidia-modeset" | sudo tee -a /etc/modprobe.d/blacklist-nvidia.conf >/dev/null
+
+# Убеждаемся, что nouveau включен (обычно включен по умолчанию)
+# Если нужно — можно добавить в initramfs, но в Arch nouveau уже включён по умолчанию
+# Убедимся, что модуль nouveau не заблокирован
+sudo rm -f /etc/modprobe.d/blacklist-nouveau.conf 2>/dev/null || true
+
+# Пересоздаём initramfs для применения blacklist
 sudo mkinitcpio -P
+
+# Обновляем кэш динамических библиотек
 sudo ldconfig
 
-#------------------
-#just apps what i use
-sudo pacman -S --noconfirm python3
-sudo pacman -S --noconfirm vlc-plugin-ffmpeg vlc-plugin-x264 vlc-plugin-x265 vlc-plugins-all vlc-plugin-ffmpeg  && sudo pacman -S --noconfirm vlc-plugin-ffmpeg
 # ------------------
-# auto isntall aur
-sudo pacman -S --noconfirm git micro lolcat cmatrix && sudo pacman -S --noconfirm micro nano lolcat git cmatrix #and other from pacman, part from yay(aur) after
+# Установка AUR-менеджера yay
+# ------------------
+
+sudo pacman -S --noconfirm git micro lolcat cmatrix
 git clone https://aur.archlinux.org/yay.git
-sleep 2
 cd yay
-makepkg -si
-sleep 2
+makepkg -si --noconfirm
 cd ..
 sudo rm -rf yay
-# --------------
-# installing my package
-yay -S --noconfirm video2ascii yandex-music telegram-desktop discord --noconfirm #no steam because i dont need him on linux, im playing games on windows
-yay -S --noconfirm mangohud-git
+
+# ------------------
+# Установка приложений из AUR
+# ------------------
+
+yay -S --noconfirm video2ascii yandex-music telegram-desktop discord mangohud-git
+
+# Установка шрифтов Powerline
 git clone https://github.com/powerline/fonts.git --depth=1
 cd fonts
 ./install.sh
 cd ..
 rm -rf fonts
-# Внутри chroot:
-sudo pacman -S --noconfirm tmux
-sudo pacman -S --noconfirm expect
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+
+# ------------------
+# Установка Oh My Zsh
+# ------------------
+
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
+
+# ------------------
+# Дополнительные системные пакеты
+# ------------------
+
+sudo pacman -S --noconfirm tmux expect
+
+echo -e "\n\e[42m\e[30mУстановка завершена! Перезагрузитесь для применения драйверов.\e[0m"
+echo -e "\e[42m\e[30mRestart your system to apply Nouveau drivers.\e[0m"
