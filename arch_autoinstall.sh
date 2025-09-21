@@ -63,7 +63,7 @@ sudo pacman -S --noconfirm xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 sudo pacman -S --noconfirm vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
 sudo pacman -S --noconfirm lib32-nouveau-dri
 sudo pacman -S --noconfirm lib32-mesa lib32-vulkan-icd-loader lib32-vulkan-radeon lib32-vulkan-intel
-sudo pacman -S --noconfirm lib32-nouveau-dri
+sudo pacman -S --noconfirm lib32-nouveau-dri nftables
 sudo mkinitcpio -P
 sudo ldconfig
 
@@ -90,4 +90,7 @@ cd fonts
 ./install.sh
 cd ..
 rm -rf fonts
+# Внутри chroot:
+sudo pacman -S --noconfirm tmux
+sudo pacman -S --noconfirm expect
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
