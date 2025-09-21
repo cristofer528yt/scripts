@@ -85,3 +85,9 @@ sudo rm -rf yay
 # installing my package
 yay -S --noconfirm video2ascii yandex-music telegram-desktop discord --noconfirm #no steam because i dont need him on linux, im playing games on windows
 yay -S --noconfirm mangohud-git
+git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
