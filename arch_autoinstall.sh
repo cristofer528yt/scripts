@@ -41,18 +41,18 @@ sudo pacman -S --noconfirm \
     vlc mpv smplayer celluloid \
     mplayer mpv-mpris \
     mediainfo exiftool handbrake handbrake-cli
-sudo pacman -S flameshot obs-studio
-sudo pacman -S gimp inkscape krita
-sudo pacman -S htop bashtop gotop
-sudo pacman -S ncdu baobab gparted
-sudo pacman -S wireshark-qt nmap
-sudo pacman -S timeshift
-sudo pacman -S wine-staging lutris
-sudo pacman -S audacity ardour
-sudo pacman -S handbrake
-sudo pacman -S code visual-studio-code-bin
-sudo pacman -S python-pip
-sudo pacman -S firefox chromium
+sudo pacman -S --noconfirm flameshot obs-studio
+sudo pacman -S --noconfirm gimp inkscape krita
+sudo pacman -S --noconfirm htop bashtop gotop
+sudo pacman -S --noconfirm ncdu baobab gparted
+sudo pacman -S --noconfirm wireshark-qt nmap
+sudo pacman -S --noconfirm timeshift
+sudo pacman -S --noconfirm wine-staging lutris
+sudo pacman -S --noconfirm audacity ardour
+sudo pacman -S --noconfirm handbrake
+sudo pacman -S --noconfirm code visual-studio-code-bin
+sudo pacman -S --noconfirm python-pip
+sudo pacman -S --noconfirm firefox chromium
 sudo pacman -S --noconfirm mesa lib32-mesa vulkan-icd-loader lib32-vulkan-icd-loader
 sudo pacman -S --noconfirm xf86-video-intel xf86-video-amdgpu xf86-video-nouveau
 sudo pacman -S --noconfirm vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
@@ -73,7 +73,7 @@ sudo pacman -S --noconfirm python3
 sudo pacman -S --noconfirm vlc-plugin-ffmpeg vlc-plugin-x264 vlc-plugin-x265 vlc-plugins-all vlc-plugin-ffmpeg  && sudo pacman -S --noconfirm vlc-plugin-ffmpeg
 # ------------------
 # auto isntall aur
-sudo pacman -S --noconfirm git micro lolcat cmatrix && sudo pacman -S micro nano lolcat git cmatrix #and other from pacman, part from yay(aur) after
+sudo pacman -S --noconfirm git micro lolcat cmatrix && sudo pacman -S --noconfirm micro nano lolcat git cmatrix #and other from pacman, part from yay(aur) after
 git clone https://aur.archlinux.org/yay.git
 sleep 2
 cd yay
@@ -83,5 +83,5 @@ cd ..
 sudo rm -rf yay
 # --------------
 # installing my package
-yay -S video2ascii yandex-music telegram-desktop discord --noconfirm #no steam because i dont need him on linux, im playing games on windows
-yay -S mangohud-git
+yay -S --noconfirm video2ascii yandex-music telegram-desktop discord --noconfirm #no steam because i dont need him on linux, im playing games on windows
+yay -S --noconfirm mangohud-git
